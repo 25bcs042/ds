@@ -1,0 +1,13 @@
+str = "shri mata vaishna devi university katra "
+print(len(str))
+print(str[1:7])
+print(str[2:27])
+print(str[0: ]) 
+print(str[-35:-1])
+print(str.endswith("katra "))
+str = str.capitalize()
+print(str)
+print(str.replace("a","o"))
+print(str)
+str = str.replace("a" , "k")
+print(str)

@@ -1,0 +1,219 @@
+<!xmnndkndmdvmcvmk c,c,bDOCTYPE html>
+<html lang="en">
+<head>
+    <meta <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Snack Order</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 420px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #paymentPage {
+            display: none;
+        }
+        .upi-box {
+            background: #e8ffe8;
+            padding: 10px;
+            border: 1px solid #5cb85c;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="orderPage">
+    <h2>Order Snacks</h2>
+
+    <label>Customer Name</label>
+    <input type="text" id="custName" required>
+
+    <label>Phone Number</label>
+    <input type="text" id="custPhone" required>
+
+    <label>Room Number</label>
+    <input type="text" id="roomNo" required>
+
+    <label>Select Item</label>
+    <select id="itemSelect">
+        <option value="Maggi">Maggi - ₹20</option>
+        <option value="Kurkure">Kurkure - ₹20</option>
+    </select>
+
+    <button onclick="goToPayment()">Next</button>
+</div>
+
+<div class="container" id="paymentPage">
+    <h2>Payment</h2>
+    <p><b>Selected Item:</b> <span id="selectedItem"></span></p>
+    <p><b>Total Price:</b> ₹20</p>
+
+    <div class="upi-box">
+        <p><b>Pay to UPI ID:</b><br>7006036232-s71a@ybl</p>
+        <p><b>Vendor Phone:</b> 7006036232</p>
+    </div>
+
+    <p>After payment, show the transaction screenshot to the vendor.</p>
+</div>
+
+<script>
+    function goToPayment() {
+        let name = document.getElementById("custName").value;
+        let phone = document.getElementById("custPhone").value;
+        let room = document.getElementById("roomNo").value;
+
+        if (!name || !phone || !room) {
+            alert("Please fill all details");
+            return;
+        }
+
+        let item = document.getElementById("itemSelect").value;
+        document.getElementById("selectedItem").innerText = item;
+
+        document.getElementById("orderPage").style.display = "none";
+        document.getElementById("paymentPage").style.display = "block";
+    }
+</script>
+
+</body>
+</html>charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Snack Order</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 420px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #paymentPage {
+            display: none;
+        }
+        .upi-box {
+            background: #e8ffe8;
+            padding: 10px;
+            border: 1px solid #5cb85c;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="orderPage">
+    <h2>Order Snacks</h2>
+
+    <label>Customer Name</label>
+    <input type="text" id="custName" required>
+
+    <label>Phone Number</label>
+    <input type="text" id="custPhone" required>
+
+    <label>Room Number</label>
+    <input type="text" id="roomNo" required>
+
+    <label>Select Item</label>
+    <select id="itemSelect">
+        <option value="Maggi">Maggi - ₹20</option>
+        <option value="Kurkure">Kurkure - ₹20</option>
+    </select>
+
+    <button onclick="goToPayment()">Next</button>
+</div>
+
+<div class="container" id="paymentPage">
+    <h2>Payment</h2>
+    <p><b>Selected Item:</b> <span id="selectedItem"></span></p>
+    <p><b>Total Price:</b> ₹20</p>
+
+    <div class="upi-box">
+        <p><b>Pay to UPI ID:</b><br>7006036232-s71a@ybl</p>
+        <p><b>Vendor Phone:</b> 7006036232</p>
+    </div>
+
+    <p>After payment, show the transaction screenshot to the vendor.</p>
+</div>
+
+<script>
+    function goToPayment() {
+        let name = document.getElementById("custName").value;
+        let phone = document.getElementById("custPhone").value;
+        let room = document.getElementById("roomNo").value;
+
+        if (!name || !phone || !room) {
+            alert("Please fill all details");
+            return;
+        }
+
+        let item = document.getElementById("itemSelect").value;
+        document.getElementById("selectedItem").innerText = item;
+
+        document.getElementById("orderPage").style.display = "none";
+        document.getElementById("paymentPage").style.display = "block";
+    }
+</script>
+
+</body>
+</html>

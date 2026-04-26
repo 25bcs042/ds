@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Sobha 🎉</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(circle, #000428, #004e92);
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 3;
+    background: rgba(0,0,0,0.65);
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 0 30px #ff69b4;
+    width: 320px;
+}
+
+h1 {
+    font-size: 38px;
+    color: #ff69b4;
+    text-shadow: 0 0 15px #ff1493;
+}
+
+.typing {
+    font-size: 34px;
+    color: #ffd700;
+    margin: 10px 0;
+    border-right: 3px solid white;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    animation: typing 4s steps(20) forwards, blink 0.8s infinite;
+}
+
+p {
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+@keyframes blink {
+    50% { border-color: transparent; }
+}
+
+/* Slideshow */
+.slideshow {
+    margin-top: 15px;
+}
+.slideshow img {
+    width: 100%;
+    height: 200px;
+    border-radius: 15px;
+    display: none;
+}
+.slideshow img.active {
+    display: block;
+}
+
+/* Balloons */
+.balloon {
+    position: absolute;
+    bottom: -100px;
+    width: 40px;
+    height: 55px;
+    background: red;
+    border-radius: 50%;
+    animation: float 8s linear infinite;
+    opacity: 0.8;
+}
+.balloon::after {
+    content: '';
+    width: 2px;
+    height: 30px;
+    background: white;
+    position: absolute;
+    top: 55px;
+    left: 50%;
+}
+@keyframes float {
+    from { transform: translateY(0); }
+    to { transform: translateY(-120vh); }
+}
+
+/* Button */
+button {
+    margin-top: 15px;
+    padding: 10px 18px;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    background: #25D366;
+    color: white;
+    cursor: pointer;
+}
+button:hover {
+    background: #1da851;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<!-- Music -->
+<audio autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">
+</audio>
+
+<div class="container">
+    <h1>🎉 Happy Birthday 🎉</h1>
+    <div class="typing">Sobha 💖</div>
+
+    <p>
+        May your life shine bright ✨<br>
+        Happiness always follow you 🌈<br>
+        Stay blessed & smiling 🎂
+    </p>
+
+    <!-- PHOTO SLIDESHOW -->
+    <div class="slideshow">
+        <!-- Replace images with your own -->
+        <img src="IMG_20260108_212649.jpg" class="active">
+        <img src="IMG_20260108_212649.jpg">
+        <img src="IMG_20260108_212649.jpg">
+    </div>
+
+<script>
+/* FIREWORKS */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let fireworks = [];
+class Firework {
+  constructor(x,y){
+    this.p=[];
+    for(let i=0;i<50;i++){
+      this.p.push({
+        x,y,
+        a:Math.random()*Math.PI*2,
+        s:Math.random()*5+2,
+        o:1,
+        c:`hsl(${Math.random()*360},100%,50%)`
+      });
+    }
+  }
+  draw(){
+    this.p.forEach(e=>{
+      e.x+=Math.cos(e.a)*e.s;
+      e.y+=Math.sin(e.a)*e.s;
+      e.o-=0.01;
+      ctx.globalAlpha=e.o;
+      ctx.fillStyle=e.c;
+      ctx.fillRect(e.x,e.y,4,4);
+    });
+  }
+}
+setInterval(()=>{
+  fireworks.push(new Firework(Math.random()*canvas.width,Math.random()*canvas.height/2));
+},700);
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  fireworks.forEach((f,i)=>{
+    f.draw();
+    if(f.p[0].o<=0) fireworks.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* SLIDESHOW */
+let slides=document.querySelectorAll(".slideshow img");
+let i=0;
+setInterval(()=>{
+  slides[i].classList.remove("active");
+  i=(i+1)%slides.length;
+  slides[i].classList.add("active");
+},2500);
+
+/* BALLOONS */
+for(let i=0;i<20;i++){
+  let b=document.createElement("div");
+  b.className="balloon";
+  b.style.left=Math.random()*100+"vw";
+  b.style.background=`hsl(${Math.random()*360},100%,50%)`;
+  b.style.animationDuration=(Math.random()*5+6)+"s";
+  document.body.appendChild(b);
+}
+
+/* WhatsApp */
+function share(){
+  let msg="🎉 Happy Birthday Sobha! 🎂✨ Wishing you lots of happiness 💖";
+  window.open("https://wa.me/?text="+encodeURIComponent(msg));
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hostel Night Snacks</title>
+  <style>
+    :root{--bg:#f7fafc;--card:#ffffff;--muted:#6b7280;--accent:#2563eb}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;background:var(--bg);color:#111}
+    .container{max-width:1024px;margin:28px auto;padding:18px}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+    header{display:flex;justify-content:space-between;align-items:center}
+    h1{margin:0;font-size:20px}
+    .muted{color:var(--muted);font-size:13px}
+    .grid{display:grid;gap:16px;margin-top:16px}
+    @media(min-width:800px){.grid{grid-template-columns:2fr 1fr}}
+    .menu-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;border:1px solid #eef2f7}
+    button{cursor:pointer}
+    .btn{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px}
+    .small-btn{background:transparent;border:1px solid #d1d5db;padding:6px 8px;border-radius:6px}
+    .cart{margin-top:12px}
+    .input, textarea{width:100%;padding:8px;border:1px solid #e6e9ef;border-radius:8px}
+    .aside .section{margin-bottom:12px}
+    .admin-toggle{font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid #e6e9ef}
+    .order-card{border:1px solid #eef2f7;padding:10px;border-radius:8px;background:#fbfdff}
+    .flex{display:flex;align-items:center}
+    .space-x{gap:8px;display:flex}
+    .right{text-align:right}
+    footer{margin-top:12px;font-size:12px;color:var(--muted);text-align:center}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <header>
+        <div>
+          <h1>Hostel Night Snacks</h1>
+          <div class="muted">Open: 11:00 PM — 3:00 AM (Night-only)</div>
+        </div>
+        <div>
+          <button id="adminToggle" class="admin-toggle">Show Admin</button>
+        </div>
+      </header>
+
+      <div class="grid">
+        <main>
+          <section>
+            <h3>Menu</h3>
+            <div id="menuList"></div>
+
+            <div class="cart" id="cartArea">
+              <h4>Cart</h4>
+              <div id="cartList"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+                <div class="muted">Total</div>
+                <div id="totalAmount" class="right"><strong>₹0</strong></div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <aside class="aside">
+          <div class="section card" style="padding:12px">
+            <h3>Your details</h3>
+            <div style="margin-top:10px">
+              <input id="custName" class="input" placeholder="Your name" />
+            </div>
+            <div style="margin-top:8px">
+              <input id="custRoom" class="input" placeholder="Room number" />
+            </div>
+            <div style="margin-top:8px">
+              <input id="custPhone" class="input" placeholder="Phone (for delivery)" />
+            </div>
+            <div style="margin-top:8px">
+              <textarea id="custNote" rows="2" class="input" placeholder="Extra note (e.g. less spice)"></textarea>
+            </div>
+            <div style="margin-top:10px">
+              <button id="placeOrderBtn" class="btn" style="width:100%">Place Order</button>
+            </div>
+            <div class="muted" style="margin-top:8px;font-size:12px">Tip: set vendor phone in code to auto-open WhatsApp, or use Admin to view orders.</div>
+          </div>
+
+          <div class="section card" style="padding:12px;margin-top:12px">
+            <h4>Contact / Info</h4>
+            <div class="muted">Delivery inside hostel only. Keep exact change ready.</div>
+          </div>
+        </aside>
+      </div>
+
+      <div id="adminArea" style="margin-top:16px;display:none">
+        <div class="card" style="padding:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3>Admin — Recent Orders</h3>
+            <div class="space-x">
+              <button id="exportBtn" class="small-btn">Export JSON</button>
+              <button id="clearBtn" class="small-btn">Clear</button>
+            </div>
+          </div>
+
+          <div id="ordersList" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <footer>Made for hostel night vendors • Customize menu & vendor phone in the code.</footer>
+    </div>
+  </div>
+
+  <script>
+    // -- Configuration --
+    const vendorPhone = "917006036232"; // put vendor phone in international format e.g. 919876543210 to auto-open WhatsApp
+
+    // initial menu
+    const initialMenu = [
+      { id: 1, name: "Maggi (2-min)", price: 40, desc: "Masaledar instant noodles" },
+      { id: 2, name: "Kurkure (Small)", price: 20, desc: "Crispy spicy snack" },
+      { id: 3, name: "Kurkure (Large)", price: 35, desc: "Bada packet, zyada maza" },
+      { id: 4, name: "Cold Drink (250ml)", price: 30, desc: "Thanda fizzy drink" }
+    ];
+
+    // state
+    let menu = initialMenu.slice();
+    let cart = [];
+    let orders = [];
+
+    // dom
+    const menuList = document.getElementById('menuList');
+    const cartList = document.getElementById('cartList');
+    const totalAmountDiv = document.getElementById('totalAmount');
+    const placeOrderBtn = document.getElementById('placeOrderBtn');
+    const custName = document.getElementById('custName');
+    const custRoom = document.getElementById('custRoom');
+    const custPhone = document.getElementById('custPhone');
+    const custNote = document.getElementById('custNote');
+    const adminToggle = document.getElementById

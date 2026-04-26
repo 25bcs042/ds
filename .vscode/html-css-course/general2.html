@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quick Delivery</title>
+
+<style>
+body { margin:0; font-family:Segoe UI; background:#f8f8f8; }
+
+.header {
+    background:#e23744; color:white; padding:15px;
+    text-align:center; font-size:22px; font-weight:bold;
+}
+
+.search { padding:10px; text-align:center; }
+.search input {
+    width:90%; padding:10px; border-radius:8px; border:none;
+}
+
+.container {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:15px; padding:15px;
+}
+
+.card {
+    background:white; border-radius:12px; padding:10px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.1);
+}
+.card:hover { transform:scale(1.05); }
+
+.name { font-weight:bold; }
+.price { color:#e23744; }
+
+.qty {
+    display:flex; justify-content:space-between;
+    align-items:center; margin-top:5px;
+}
+
+button {
+    background:#e23744; color:white;
+    border:none; padding:5px 10px;
+    border-radius:5px;
+}
+
+.cart {
+    position:fixed; bottom:0; width:100%;
+    background:white; padding:10px;
+    box-shadow:0 -2px 10px rgba(0,0,0,0.2);
+}
+
+.form-box {
+    padding:10px; text-align:center;
+}
+.form-box input {
+    width:90%; margin:5px; padding:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">🛒 General Store Delivery</div>
+
+<div class="search">
+    <input type="text" placeholder="Search item..." onkeyup="searchItem(this.value)">
+</div>
+
+<div class="container" id="menu"></div>
+
+<div class="form-box">
+    <input type="text" id="name" placeholder="Your Name">
+    <input type="text" id="phone" placeholder="Phone Number">
+    <input type="text" id="building" placeholder="Building No / Address">
+</div>
+
+<div class="cart">
+    <span id="total">Total: ₹0</span>
+    <button onclick="placeOrder()">Place Order</button>
+</div>
+
+<script>
+
+// 🔥 FULL GENERAL STORE ITEMS
+const items = [
+    {name:"Milk", price:23},
+    {name:"Maggi", price:40},
+    {name:"Bread", price:25},
+    {name:"Butter", price:55},
+    {name:"Kurkure", price:10},
+    {name:"Dairy Milk", price:20},
+    {name:"Rice", price:120},
+    {name:"Sugar", price:45},
+    {name:"Salt", price:20},
+    {name:"Tea", price:90},
+    {name:"Coffee", price:120},
+    {name:"Soap", price:35},
+    {name:"Shampoo", price:120},
+    {name:"Toothpaste", price:45},
+    {name:"Detergent", price:200},
+    {name:"Biscuits", price:30},
+    {name:"Cold Drink", price:50},
+    {name:"Water Bottle", price:20},
+    {name:"Eggs", price:70},
+    {name:"Cheese", price:60}
+];
+
+let cart = {};
+
+function loadMenu(list){
+    let menu = document.getElementById("menu");
+    menu.innerHTML = "";
+
+    list.forEach(item=>{
+        menu.innerHTML += `
+        <div class="card">
+            <div class="name">${item.name}</div>
+            <div class="price">₹${item.price}</div>
+
+            <div class="qty">
+                <button onclick="addItem('${item.name}', ${item.price})">+</button>
+                <span id="${item.name}">0</span>
+                <button onclick="removeItem('${item.name}')">-</button>
+            </div>
+        </div>
+        `;
+    });
+}
+
+loadMenu(items);
+
+function addItem(name, price){
+    if(!cart[name]) cart[name] = {qty:0, price:price};
+    cart[name].qty++;
+    document.getElementById(name).innerText = cart[name].qty;
+    updateTotal();
+}
+
+function removeItem(name){
+    if(cart[name] && cart[name].qty>0){
+        cart[name].qty--;
+        document.getElementById(name).innerText = cart[name].qty;
+    }
+    updateTotal();
+}
+
+function updateTotal(){
+    let total = 0;
+    for(let item in cart){
+        total += cart[item].qty * cart[item].price;
+    }
+    document.getElementById("total").innerText = "Total: ₹" + total;
+}
+
+function searchItem(value){
+    let filtered = items.filter(i => i.name.toLowerCase().includes(value.toLowerCase()));
+    loadMenu(filtered);
+}
+
+// 📲 FINAL ORDER FUNCTION
+function placeOrder(){
+    let name = document.getElementById("name").value;
+    let phone = document.getElementById("phone").value;
+    let building = document.getElementById("building").value;
+
+    if(name === "" || phone === "" || building === ""){
+        alert("Please fill all details!");
+        return;
+    }
+
+    let text = `🛒 *New Order*%0A`;
+    text += `Name: ${name}%0A`;
+    text += `Phone: ${phone}%0A`;
+    text += `Address: ${building}%0A%0A`;
+
+    let total = 0;
+
+    for(let item in cart){
+        if(cart[item].qty > 0){
+            let cost = cart[item].qty * cart[item].price;
+            total += cost;
+            text += `${item} x ${cart[item].qty} = ₹${cost}%0A`;
+        }
+    }
+
+    text += `%0ATotal: ₹${total}`;
+
+    // ✅ YOUR WHATSAPP NUMBER ADDED
+    let url = `https://wa.me/7562052100?text=${text}`;
+    window.open(url);
+}
+
+</script>
+
+</body>
+</html>

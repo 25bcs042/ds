@@ -1,0 +1,6 @@
+print("hello world") 
+print("my name is karn kumar")
+print("my age is 20")
+print("the house is manikauli ." , "post office is also manikauli")
+print(23)
+print(23+3) 

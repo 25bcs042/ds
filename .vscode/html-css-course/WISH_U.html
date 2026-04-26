@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eid Mubarak Mujahida</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Moon Background */
+            background: 
+                radial-gradient(ellipse 60% 50% at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 50%),
+                radial-gradient(ellipse 40% 35% at 80% 70%, rgba(255,255,255,0.35) 0%, transparent 40%),
+                radial-gradient(circle at 50% 20%, rgba(255,255,255,0.6) 0%, transparent 30%),
+                linear-gradient(135deg, #0f0f23 0%, #1a1a3e 30%, #2d1b69 60%, #9eb4a4 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Enhanced Music Player */
+        .music-player {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            padding: 18px;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(212,175,55,0.3);
+            min-width: 85px;
+            text-align: center;
+        }
+
+        .music-title {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .music-btn {
+            background: linear-gradient(45deg, #5d594a, #518a51);
+            border: none;
+            border-radius: 50%;
+            width: 65px;
+            height: 65px;
+            font-size: 26px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(212,175,55,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: bold;
+        }
+
+        .music-btn:hover { 
+            transform: scale(1.15) rotate(5deg); 
+            box-shadow: 0 15px 40px rgba(212,175,55,0.7);
+        }
+        .music-btn.playing { 
+            background: linear-gradient(45deg, #28a745, #20c997);
+            animation: pulseMusic 2s infinite;
+        }
+
+        .music-progress {
+            width: 100%;
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .music-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(45deg, #46407e, #5d4988);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .volume-slider {
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            outline: none;
+            margin: 0;
+        }
+
+        @keyframes pulseMusic {
+            0% { box-shadow: 0 0 0 0 rgba(40,167,69,0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(40,167,69,0); }
+            100% { box-shadow: 0 0 0 0 rgba(40,167,69,0); }
+        }
+
+        /* Animated Background Elements */
+        .sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: #FFF;
+            border-radius: 50%;
+            animation: twinkle 2.5s infinite alternate;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        .star:nth-child(1) { top: 15%; left: 8%; width: 5px; height: 5px; animation-delay: 0s; }
+        .star:nth-child(2) { top: 8%; left: 85%; width: 4px; height: 4px; animation-delay: 0.7s; }
+        .star:nth-child(3) { top: 25%; right: 12%; width: 6px; height: 6px; animation-delay: 1.2s; }
+        .star:nth-child(4) { top: 4%; left: 65%; width: 3px; height: 3px; animation-delay: 1.8s; }
+        .star:nth-child(5) { top: 12%; right: 25%; width: 4px; height: 4px; animation-delay: 0.4s; }
+        .star:nth-child(6) { top: 35%; left: 20%; width: 3px; height: 3px; animation-delay: 2.1s; }
+
+        /* Smaller Crescent to complement main moon */
+        .crescent {
+            position: absolute;
+            top: 12%;
+            right: 18%;
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(0, 0, 0, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255,255,255,0.7);
+            clip-path: polygon(0 0, 100% 0, 70% 50%, 100% 100%, 0 100%);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        /* Traditional Eid Elements */
+        .eid-elements {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 35px;
+            z-index: 5;
+            align-items: center;
+        }
+
+        .eid-item {
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(255,215,0,0.6));
+        }
+
+        .hijri-date {
+            font-size: 28px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #13083a, #3b0f09);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px #D4AF37;
+            animation: kaabaGlow 3s ease-in-out infinite alternate;
+        }
+
+        .kaaba {
+            font-size: 3.5rem;
+            filter: drop-shadow(0 0 30px #D4AF37);
+            animation: kaabaGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes kaabaGlow {
+            0% { filter: drop-shadow(0 0 10px #000000); }
+            100% { filter: drop-shadow(0 0 25px #4f0a52); }
+        }
+
+        @keyframes twinkle { 0% { opacity: 0.4; transform: scale(1); } 100% { opacity: 1; transform: scale(1.3); } }
+        @keyframes glow { 0% { box-shadow: 0 0 25px rgba(255,255,255,0.8); } 100% { box-shadow: 0 0 50px rgba(255,255,255,1); } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* MAIN CARD */
+        .card {
+            background: rgba(69, 13, 13, 0.97);
+            backdrop-filter: blur(25px);
+            border-radius: 35px;
+            padding: 45px;
+            max-width: 580px;
+            width: 92%;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            position: relative;
+            z-index: 10;
+            animation: slideUp 1.2s ease-out;
+            border: 3px solid rgba(212,175,55,0.3);
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(60px) scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        .friend-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 10px solid #524e36;
+            margin: 0 auto 25px;
+            object-fit: cover;
+            box-shadow: 0 20px 45px rgba(212,175,55,0.5);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212,175,55,0.8); }
+            70% { box-shadow: 0 0 0 25px rgba(212,175,55,0); }
+            100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
+        }
+
+        .eid-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #D4AF37, #272518, #32CD32, #228B22);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            animation: bounce 2.5s infinite;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-8px); }
+        }
+
+        .arabic-eid {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #0c540c;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+            letter-spacing: 2px;
+        }
+
+        .subtext {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: 400;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .message {
+            font-size: 1.15rem;
+            color: #34495e;
+            line-height: 1.85;
+            margin-bottom: 35px;
+            font-weight: 400;
+            padding: 0 15px;
+        }
+
+        .friend-name {
+            color: #228B22;
+            font-weight: 700;
+            font-size: 1.4rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .decorations {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            gap: 15px;
+        }
+
+        .lantern {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #FF6B35, #F7931E, #FFD700);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255,215,0,0.6);
+        }
+
+        .lantern::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255,215,0,1);
+        }
+
+        .lantern:nth-child(2) { animation-delay: 0.8s; }
+        .lantern:nth-child(3) { animation-delay: 1.6s; }
+
+        @media (max-width: 480px) {
+            .eid-text { font-size: 2.8rem; }
+            .arabic-eid { font-size: 2.5rem; }
+            .friend-photo { width: 110px; height: 110px; }
+            .card { padding: 35px 25px; margin: 10px; }
+            .hijri-date { font-size: 22px; }
+            .music-player { right: 10px; top: 10px; padding: 15px; min-width: 75px; }
+        }/* 🎈 Floating Balloons */
+.balloons {
+    position: absolute;
+    bottom: -150px;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.balloon {
+    position: absolute;
+    width: 40px;
+    height: 55px;
+    border-radius: 50%;
+    animation: floatUp 8s linear infinite;
+    opacity: 0.85;
+}
+
+.balloon::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 40px;
+    background: #aaa;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Different colors & positions */
+.balloon:nth-child(1) { left: 10%; background: #ff4d4d; animation-delay: 0s; }
+.balloon:nth-child(2) { left: 25%; background: #4da6ff; animation-delay: 0.01; }
+.balloon:nth-child(3) { left: 45%; background: #66ff66; animation-delay: 0.01s; }
+.balloon:nth-child(4) { left: 65%; background: #ffcc00; animation-delay: 0.02s; }
+.balloon:nth-child(5) { left: 85%; background: #cc66ff; animation-delay: 0.02s; }
+.balloon:nth-child(1) { left: 10%; background: #ff4d4d; animation-delay: 0.04; }
+.balloon:nth-child(2) { left: 25%; background: #4da6ff; animation-delay: 0.04; }
+.balloon:nth-child(3) { left: 45%; background: #66ff66; animation-delay: 0.05s; }
+.balloon:nth-child(4) { left: 65%; background: #ffcc00; animation-delay: 0.05s; }
+.balloon:nth-child(5) { left: 85%; background: #cc66ff; animation-delay: 0.06s; }
+.balloon:nth-child(1) { left: 10%; background: #ff4d4d; animation-delay: 0.06S; }
+.balloon:nth-child(2) { left: 25%; background: #4da6ff; animation-delay: 0.07; }
+.balloon:nth-child(3) { left: 45%; background: #66ff66; animation-delay: 0.07s; }
+.balloon:nth-child(4) { left: 65%; background: #ffcc00; animation-delay: 0.08s; }
+.balloon:nth-child(5) { left: 85%; background: #cc66ff; animation-delay: 0.08s; }
+
+.balloon:nth-child(1) { left: 10%; background: #ff4d4d; animation-delay: 0s; }
+.balloon:nth-child(2) { left: 25%; background: #4da6ff; animation-delay: 0.1; }
+.balloon:nth-child(3) { left: 45%; background: #66ff66; animation-delay: 0.1s; }
+.balloon:nth-child(4) { left: 65%; background: #ffcc00; animation-delay: 0.2s; }
+.balloon:nth-child(5) { left: 85%; background: #cc66ff; animation-delay: 0.2s; }
+.balloon:nth-child(1) { left: 10%; background: #ff4d4d; animation-delay: 0.4; }
+.balloon:nth-child(2) { left: 25%; background: #4da6ff; animation-delay: 0.4; }
+.balloon:nth-child(3) { left: 45%; background: #66ff66; animation-delay: 0.5s; }
+.balloon:nth-child(4) { left: 65%; background: #ffcc00; animation-delay: 0.5s; }
+.balloon:nth-child(5) { left: 85%; background: #cc66ff; animation-delay: 0.6s; }
+.balloon:nth-child(1) { left: 10%; background: #ff4d4d; animation-delay: 0.6S; }
+.balloon:nth-child(2) { left: 25%; background: #4da6ff; animation-delay: 0.7; }
+.balloon:nth-child(3) { left: 45%; background: #66ff66; animation-delay: 0.7s; }
+.balloon:nth-child(4) { left: 65%; background: #ffcc00; animation-delay: 0.8s; }
+.balloon:nth-child(5) { left: 85%; background: #cc66ff; animation-delay: 0.8s; }
+
+/* Animation */
+@keyframes floatUp {
+    0% {
+        transform: translateY(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-110vh);
+        opacity: 0;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Night Sky with Stars -->
+    <div class="sky">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="crescent"></div>
+    </div>
+     <!-- 🎈 Floating Balloons -->
+<div class="balloons">
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+</div>
+    <!-- Eid Elements -->
+    <div class="eid-elements">
+        <div class="eid-item hijri-date">Eid-ul-Fitr 1446 AH</div>
+        <div class="eid-item misbaha">📿</div>
+        <div class="eid-item kaaba">🕋</div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card">
+        <img src="https://image2url.com/r2/default/images/1774025021804-6975f588-3da8-4723-828c-c35d4230ae6c.jpg" 
+             alt="Mujahida" class="friend-photo">
+        
+        <h1 class="arabic-eid">عيد مبارك</h1>
+        <h1 class="eid-text">Eid Mubarak Mujahida!</h1>
+        
+        <p class="subtext">May Allah bless you with happiness, peace and prosperity<p></p>
+        <p class="message">
+            Dear <span class="friend-name">Mujahida</span>,<br>
+🤌🤌हँसते दिलों में ग़म भी है,
+मुस्कुराते लम्हों में कभी नम भी हैं।
+दुआ करते हैं कि आपकी खुशियाँ कभी न रुकें,
+क्योंकि आपकी हँसी के दीवाने हम भी हैं।<br><br>
+            <span style="color: #D4AF37; font-weight: 600;">Eid Saeed!</span>
+        </p>
+        
+        <div class="decorations">
+            <div class="lantern"></div>
+            <div class="lantern"></div>
+            <div class="lantern"></div>
+        </div>
+    </div>
+</body>
+</html>

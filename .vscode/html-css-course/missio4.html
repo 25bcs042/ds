@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hostel Snack Shop — Maggi, Kurkure, Cold Drink</title>
+  <style>
+    :root{ --accent:#ff6f61; --bg:#f7f7f8; --card:#ffffff; --muted:#666 }
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans',arial; margin:0;background:var(--bg); color:#222}
+    header{background:linear-gradient(90deg,var(--accent),#ff9a76); color:white;padding:18px 16px}
+    .container{max-width:900px;margin:18px auto;padding:12px}
+    h1{margin:0;font-size:20px}
+    .hero{display:flex;gap:12px;align-items:center}
+    .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 6px 20px rgba(10,10,10,0.06)}
+    .menu{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .menu-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;border:1px solid #eee}
+    .menu-item .info{max-width:70%}
+    label{display:block;font-size:14px;margin-bottom:6px}
+    input[type="number"], input[type="text"], input[type="tel"] , select{width:100%;padding:8px;border-radius:6px;border:1px solid #ddd}
+    .row{display:flex;gap:12px}
+    .row .col{flex:1}
+    .summary{margin-top:12px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:8px;border:0;cursor:pointer}
+    .btn-primary{background:var(--accent);color:white}
+    .btn-muted{background:#eee}
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+    @media(max-width:640px){.menu{grid-template-columns:1fr}.hero{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container hero">
+      <div>
+        <h1>Hostel Snack Shop</h1>
+        <div style="font-size:13px;opacity:.95">Maggi • Kurkure • Cold Drink</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:13px">Order / Contact</div>
+        <strong>‪+91 91860 74931‬</strong>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2 style="margin-top:0">Menu</h2>
+      <div class="menu" id="menu">
+        <div class="menu-item">
+          <div class="info">
+            <div style="font-weight:600">Maggi</div>
+            <div style="font-size:13px;color:var(--muted)">Masaledaar instant noodles</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:700">₹40</div>
+            <div style="margin-top:6px"><input type="number" min="0" value="0" data-price="40" data-name="Maggi" class="qty" /></div>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <div class="info">
+            <div style="font-weight:600">Kurkure (Pack)</div>
+            <div style="font-size:13px;color:var(--muted)">Masaledaar chips pack</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:700">₹20</div>
+            <div style="margin-top:6px"><input type="number" min="0" value="0" data-price="20" data-name="Kurkure" class="qty" /></div>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <div class="info">
+            <div style="font-weight:600">Cold Drink (Can)</div>
+            <div style="font-size:13px;color:var(--muted)">330ml chilled can</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:700">₹30</div>
+            <div style="margin-top:6px"><input type="number" min="0" value="0" data-price="30" data-name="Cold Drink" class="qty" /></div>
+          </div>
+        </div>
+
+        <div class="menu-item" style="grid-column:1/-1">
+          <div style="font-size:13px;color:var(--muted)">Note: Prices example ke liye hain. Agar aap price change karwana chahte hain to bata dijiye.</div>
+        </div>
+      </div>
+
+      <form id="orderForm" onsubmit="return false;" style="margin-top:14px">
+        <h3>Customer details</h3>
+        <div class="row">
+          <div class="col">
+            <label>Full name</label>
+            <input type="text" id="custName" placeholder="Aapka naam" required />
+          </div>
+          <div class="col">
+            <label>Hostel / Room no.</label>
+            <input type="text" id="room" placeholder="eg. GH-2 / 204" required />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div class="col">
+            <label>Phone</label>
+            <input type="tel" id="phone" placeholder="+91 xxxxxxxxxx" pattern="[0-9]{10}" required />
+          </div>
+          <div class="col">
+            <label>Prefer delivery time</label>
+            <select id="timePref">
+              <option>As soon as possible</option>
+              <option>10–15 minutes</option>
+              <option>Specific time</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="summary card" style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0">Order summary</h3>
+          <div id="orderList" style="min-height:40px;color:var(--muted)">Koi item select nahi hua.</div>
+          <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:700">Total: <span id="total">₹0</span></div>
+            <div>
+              <button class="btn btn-muted" type="button" onclick="resetOrder()">Reset</button>
+              <button class="btn btn-primary" type="button" onclick="preparePayment()">Pay with UPI</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="paymentArea" style="display:none;margin-top:12px" class="card">
+          <h3 style="margin:0 0 8px 0">UPI Payment</h3>
+          <div style="font-size:14px;margin-bottom:8px">UPI ID: <strong>9186074931@ybl</strong></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="text" id="amountInput" readonly style="max-width:140px" />
+            <a id="upiLink" class="btn btn-primary" href="#" onclick="openUpi(event)" target="_blank">Open UPI App</a>
+            <button type="button" class="btn" onclick="showQr()">Show QR</button>
+          </div>
+          <div id="qrArea" style="margin-top:8px;display:none">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Scan to pay (UPI)</div>
+            <img id="qrImg" alt="UPI QR" style="width:200px;height:200px;border-radius:8px;border:1px solid #eee" />
+          </div>
+
+          <div style="margin-top:10px;font-size:13px;color:var(--muted)">Payment app nahi khulta? UPI ID copy karke manually pay kar dein, aur payment ka screenshot bhej dein: <strong>+91 9186074931</strong></div>
+        </div>
+      </form>
+    </section>
+
+    <footer>
+      <div>Made for hostel sellers — Contact: +917006036232</div>
+    </footer>
+  </main>
+
+  <script>
+    // Prefill phone with your number as placeholder
+    document.getElementById('phone').value = '';
+
+    function formatINR(n){ return '₹' + (n.toFixed(0)); }
+
+    function updateSummary(){
+      const qtys = Array.from(document.querySelectorAll('.qty'));
+      const list = [];
+      let total = 0;
+      qtys.forEach(q=>{
+        const count = Number(q.value)||0;
+        const price = Number(q.dataset.price)||0;
+        const name = q.dataset.name || 'item';
+        if(count>0){
+          list.push(${name} x ${count} = ₹${price*count});
+          total += price*count;
+        }
+      });
+      document.getElementById('total').textContent = formatINR(Number(total));
+      document.getElementById('orderList').textContent = list.length? list.join('\n') : 'Koi item select nahi hua.';
+      return total;
+    }
+
+    document.querySelectorAll('.qty').forEach(el=> el.addEventListener('input', updateSummary));
+
+    function resetOrder(){
+      document.querySelectorAll('.qty').forEach(q=> q.value = 0);
+      document.getElementById('orderList').textContent = 'Koi item select nahi hua.';
+      document.getElementById('total').textContent = '₹0';
+      document.getElementById('paymentArea').style.display = 'none';
+      document.getElementById('qrArea').style.display = 'none';
+    }
+
+    function preparePayment(){
+      const total = updateSummary();
+      if(total <= 0){ alert('Kripya kam se kam ek item select karen.'); return; }
+      // fill customer validation
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const room = document.getElementById('room').value.trim();
+      if(!name || !phone || !room){ alert('Kripya apna naam, room aur phone bhar dein.'); return; }
+
+      // show payment area
+      document.getElementById('paymentArea').style.display = 'block';
+      // set amount
+      document.getElementById('amountInput').value = total;
+
+      // build UPI intent link
+      const upiId = encodeURIComponent('9186074931@ybl');
+      const payeeName = encodeURIComponent('Hostel Snack Shop by KARAN AND LUCKY');
+      const amount = encodeURIComponent(total);
+      const txnNote = encodeURIComponent(Order by ${name} ${room});
+      const upiUrl = upi://pay?pa=${upiId}&pn=${payeeName}&am=${amount}&tn=${txnNote};
+      const webUpi = https://pay.google.com/gp/p/u/;
+      // set anchor link to open UPI apps on mobile - many apps register upi://
+      const upiAnchor = document.getElementById('upiLink');
+      upiAnchor.href = upiUrl;
+      upiAnchor.dataset.upi = upiUrl;
+
+      // prepare QR image URL (static UPI QR option)
+      const qr = document.getElementById('qrImg');
+      const qrData = encodeURIComponent(upiUrl);
+      // 👉 YAHAN APNA QR IMAGE LINK DALO:
+      // Example: qr.src = 'https://i.ibb.co/xyz/yourqr.png';
+
+      // Dynamic QR (default):
+      qr.src = 'https://i.ibb.co/LztMhG68/Account-QRCode-Union-Bank-Of-India-6938-LIGHT-THEME.png';
+      // If you have your own static QR, replace above line with:
+      // qr.src = 'your-static-qr-image.png';
+    }
+
+    function openUpi(e){
+      // default behavior opens the upi:// link
+      // additionally set a fallback copy to clipboard
+      const link = e.currentTarget.dataset.upi || e.currentTarget.href;
+      if(!link) return;
+      // try to open; on desktops it may not work, so we also copy UPI id
+      setTimeout(()=>{
+        // after user returns, show reminder
+        alert('Agar UPI app na khule to UPI ID copy karke manually pay karen: 9186074931@ybl');
+      },1000);
+    }
+
+    function showQr(){
+      document.getElementById('qrArea').style.display = 'block';
+    }
+
+    // initial summary
+    updateSummary();
+
+    // simple client-side order capture (demo) — you can replace this with server API
+    // If you want, I can add a small PHP/Node endpoint to save orders.
+  </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bank System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            text-align: center;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+        input, button {
+            margin: 5px;
+            padding: 8px;
+            width: 90%;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🏦 BANK OF INDIA </h1>
+
+<div class="box">
+    <h3>Create Account</h3>
+    <input type="number" id="accNo" placeholder="Account No">
+    <input type="text" id="name" placeholder="Name">
+    <input type="number" id="balance" placeholder="Balance">
+    <button onclick="createAccount()">Create</button>
+</div>
+
+<div class="box">
+    <h3>Deposit / Withdraw</h3>
+    <input type="number" id="acc" placeholder="Account No">
+    <input type="number" id="amt" placeholder="Amount">
+    <button onclick="deposit()">Deposit</button>
+    <button onclick="withdraw()">Withdraw</button>
+</div>
+
+<div class="box">
+    <h3>Queue</h3>
+    <input type="number" id="qacc" placeholder="Account No">
+    <button onclick="addQueue()">Add to Queue</button>
+    <button onclick="serve()">Serve</button>
+</div>
+
+<div class="box">
+    <h3>Actions</h3>
+    <button onclick="display()">Display Accounts</button>
+    <button onclick="showTransactions()">Show Transactions</button>
+</div>
+
+<div class="box">
+    <h3>Output</h3>
+    <p id="output"></p>
+</div>
+
+<script>
+let accounts = [];   // Linked List equivalent
+let queue = [];      // Queue
+let stack = [];      // Stack
+
+function createAccount() {
+    let accNo = document.getElementById("accNo").value;
+    let name = document.getElementById("name").value;
+    let balance = parseFloat(document.getElementById("balance").value);
+
+    accounts.push({accNo, name, balance});
+    alert("Account Created!");
+}
+
+function display() {
+    let out = "";
+    accounts.forEach(a => {
+        out += `Acc: ${a.accNo} | Name: ${a.name} | Balance: ${a.balance}<br>`;
+    });
+    document.getElementById("output").innerHTML = out;
+}
+
+function deposit() {
+    let acc = document.getElementById("acc").value;
+    let amt = parseFloat(document.getElementById("amt").value);
+
+    let found = accounts.find(a => a.accNo == acc);
+    if(found) {
+        found.balance += amt;
+        stack.push(`Deposited ${amt} in ${acc}`);
+        alert("Deposited!");
+    } else {
+        alert("Account not found");
+    }
+}
+
+function withdraw() {
+    let acc = document.getElementById("acc").value;
+    let amt = parseFloat(document.getElementById("amt").value);
+
+    let found = accounts.find(a => a.accNo == acc);
+    if(found) {
+        if(found.balance >= amt) {
+            found.balance -= amt;
+            stack.push(`Withdrawn ${amt} from ${acc}`);
+            alert("Withdrawn!");
+        } else {
+            alert("Insufficient balance");
+        }
+    } else {
+        alert("Account not found");
+    }
+}
+
+function addQueue() {
+    let acc = document.getElementById("qacc").value;
+    queue.push(acc);
+    alert("Added to Queue");
+}
+
+function serve() {
+    if(queue.length === 0) {
+        alert("No customers");
+    } else {
+        let served = queue.shift();
+        alert("Serving Account: " + served);
+    }
+}
+
+function showTransactions() {
+    let out = "<b>Transactions:</b><br>";
+    for(let i = stack.length - 1; i >= 0; i--) {
+        out += stack[i] + "<br>";
+    }
+    document.getElementById("output").innerHTML = out;
+}
+</script>
+
+</body>
+</html>

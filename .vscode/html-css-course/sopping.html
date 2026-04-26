@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping List Manager</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #eef2f7;
+    margin: 0;
+}
+
+.navbar {
+    background: #2c3e50;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.container {
+    max-width: 500px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    margin: 8px 0;
+}
+
+button {
+    padding: 8px 10px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.add { background: green; color: white; }
+.show { background: blue; color: white; }
+.clear { background: red; color: white; }
+
+.item {
+    background: #f1f1f1;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">🛒 Shopping List Manager</div>
+
+<div class="container">
+
+<input type="number" id="budget" placeholder="Enter Budget">
+<input type="text" id="itemName" placeholder="Item Name">
+<input type="number" id="itemPrice" placeholder="Item Price">
+
+<button class="add" onclick="addItem()">Add Item</button>
+<button class="show" onclick="showItems()">Show List</button>
+<button class="clear" onclick="clearList()">Clear All</button>
+
+<div id="output"></div>
+
+</div>
+
+<script>
+let shopping_list = JSON.parse(localStorage.getItem("items")) || [];
+let prices = JSON.parse(localStorage.getItem("prices")) || [];
+
+function saveData() {
+    localStorage.setItem("items", JSON.stringify(shopping_list));
+    localStorage.setItem("prices", JSON.stringify(prices));
+}
+
+function addItem() {
+    let item = document.getElementById("itemName").value;
+    let price = parseFloat(document.getElementById("itemPrice").value);
+
+    if (item === "" || isNaN(price)) {
+        alert("Enter valid item and price");
+        return;
+    }
+
+    shopping_list.push(item);
+    prices.push(price);
+
+    saveData();
+    showItems();
+}
+
+function showItems() {
+    let output = "<h3>Shopping List</h3>";
+
+    if (shopping_list.length === 0) {
+        output += "List is empty";
+    } else {
+        let total = 0;
+
+        for (let i = 0; i < shopping_list.length; i++) {
+            total += prices[i];
+
+            output += `
+            <div class="item">
+                <b>${i + 1}. ${shopping_list[i]}</b> - ₹ ${prices[i]} <br>
+                
+                <button onclick="deleteItem(${i})">❌ Delete</button>
+                <button onclick="updateItem(${i})">✏️ Update</button>
+            </div>
+            `;
+        }
+
+        let budget = parseFloat(document.getElementById("budget").value) || 0;
+        let remaining = budget - total;
+
+        output += `<h3>Total: ₹ ${total}</h3>`;
+        output += `<h3>Remaining: ₹ ${remaining}</h3>`;
+
+        if (remaining <= 0) {
+            output += "⚠ Budget exceeded!";
+        } else if (remaining < budget * 0.2) {
+            output += "⚠ Budget running low!";
+        }
+    }
+
+    document.getElementById("output").innerHTML = output;
+}
+
+function deleteItem(index) {
+    if (confirm("Delete this item?")) {
+        shopping_list.splice(index, 1);
+        prices.splice(index, 1);
+        saveData();
+        showItems();
+    }
+}
+
+function updateItem(index) {
+    let newItem = prompt("Enter new item name:", shopping_list[index]);
+    let newPrice = prompt("Enter new price:", prices[index]);
+
+    if (newItem !== null && !isNaN(newPrice)) {
+        shopping_list[index] = newItem;
+        prices[index] = parseFloat(newPrice);
+        saveData();
+        showItems();
+    }
+}
+
+function clearList() {
+    if (confirm("Clear all items?")) {
+        shopping_list = [];
+        prices = [];
+        saveData();
+        showItems();
+    }
+}
+</script>
+
+</body>
+</html>
